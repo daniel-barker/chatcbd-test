@@ -12,6 +12,9 @@ django.setup()
 # Import models from hats_rest, here.
 # from shoes_rest.models import Something
 
+from api.shoes_rest.models import BinVO
+
+
 def poll():
     while True:
         print('Shoes poller polling for data')

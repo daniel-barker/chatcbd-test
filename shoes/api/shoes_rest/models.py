@@ -5,18 +5,21 @@ from django.urls import reverse
 
 class BinVO(models.Model):
 
-    idkyet = models.CharField
+    closet_name = models.CharField(max_length=100)
+    bin_number = models.PositiveSmallIntegerField()
+    bin_size = models.PositiveSmallIntegerField()
+    href = models.CharField(max_length=200)
 
 class Shoe(models.Model):
 
-    make = models.CharField(max_length=100)
-    model = models.CharField(max_length=200)
-    color = models.CharField(max_length=200)
-    picture = models.URLField()
+    shoe_make = models.CharField(max_length=100)
+    shoe_model = models.CharField(max_length=200)
+    shoe_color = models.CharField(max_length=200)
+    shoe_picture = models.URLField()
 
-    bin = models.ForeignKey(
+    shoe_bin_location = models.ForeignKey(
         BinVO,
-        related_name="shoes",
+        related_name="shoe_bin_location",
         on_delete=models.CASCADE,
     )
 
@@ -24,4 +27,4 @@ class Shoe(models.Model):
         return self.name
 
     def get_api_url(self):
-        return reverse("api_show_attendee", kwargs={"pk": self.pk})
+        return reverse("api_show_shoe", kwargs={"pk": self.pk})

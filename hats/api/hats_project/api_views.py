@@ -22,7 +22,7 @@ class HatDetailEncoder(ModelEncoder):
 
 
 @require_http_methods(["GET", "POST"])
-def api_list_hats(request):
+def api_list_hats(request, location_vo_id=None):
     """
     Lists the hat names and the link to the hat.
 
@@ -42,7 +42,7 @@ def api_list_hats(request):
     }
     """
     if request.method == "GET":
-        hats = Hat.objects.all()
+        hats = Hat.objects.all(location=location_vo_id)
         return JsonResponse(
             {"hats": hats},
             encoder=HatListEncoder,

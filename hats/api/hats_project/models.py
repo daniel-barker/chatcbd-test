@@ -4,11 +4,11 @@ from django.urls import reverse
 
 class LocationVO(models.Model):
     closet_name = models.CharField(max_length=200)
-    section_number = models.PositiveSmallIntegerField())
+    section_number = models.PositiveSmallIntegerField()
     shelf_number = models.PositiveSmallIntegerField()
 
-class Hat(models.Model):
 
+class Hat(models.Model):
     fabric = models.CharField(max_length=100)
     style_name = models.Charfield(max_length=100)
     color = models.CharField(max_length=100)

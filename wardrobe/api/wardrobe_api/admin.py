@@ -10,3 +10,12 @@ class LocationAdmin(admin.ModelAdmin):
         "shelf_number",
 
     )
+
+@admin.register(Bin)
+class BinAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "closet_name",
+        "bin_number",
+        "bin_size",
+    )

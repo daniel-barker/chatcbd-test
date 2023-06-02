@@ -3,11 +3,12 @@ from django.views.decorators.http import require_http_methods
 import json
 from common.json import ModelEncoder
 from .models import BinVO, Shoe
+from django.shortcuts import render
 
 class BinVOEncoder(ModelEncoder):
     model = BinVO
     properties = [
-        "href",
+        "bin_href",
         "closet_name",
 
     ]
@@ -28,7 +29,7 @@ class ShoeDetailEncoder(ModelEncoder):
         "shoe_model",
         "shoe_color",
         "shoe_picture",
-        "shoe_bin_location",
+        "bin",
     ]
     encoders = {
         "bin": BinVOEncoder(),
@@ -50,11 +51,18 @@ def api_list_shoes(request, bin_vo_id=None):
         )
     else:
         content = json.loads(request.body)
-
         try:
             bin_href = content["bin"]
-            bin = BinVO.objects.get(import_href=bin_href)
+            bin = BinVO.objects.get(bin_href=bin_href)
             content["bin"] = bin
+            shoes = Shoe.objects.create(**content)
+            return JsonResponse(
+                shoes,
+                encoder=ShoeDetailEncoder,
+                safe=False,
+            )
+
+
         except BinVO.DoesNotExist:
             return JsonResponse(
                 {"message": "Invalid bin id"},
@@ -115,7 +123,6 @@ def api_show_shoe(request, pk):
         try:
             content = json.loads(request.body)
             shoe = Shoe.objects.get(id=pk)
-
             props = ["shoe_make", "shoe_model", "shoe_color", "shoe_picture"]
             for prop in props:
                 if prop in content:

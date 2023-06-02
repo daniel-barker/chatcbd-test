@@ -1,13 +1,24 @@
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from common.json import ModelEncoder
-from models import Hat, LocationVO
+from .models import Hat, LocationVO
 import json
+
+
+class LocationVOEncoder(ModelEncoder):
+    model = LocationVO
+    properties = [
+        "shelf_number",
+        "location_href",
+    ]
 
 
 class HatListEncoder(ModelEncoder):
     model = Hat
-    properties = ["name"]
+    properties = [
+        "fabric",
+        "style_name",
+        ]
 
 
 class HatDetailEncoder(ModelEncoder):
@@ -19,6 +30,9 @@ class HatDetailEncoder(ModelEncoder):
         "picture_url",
         "location",
     ]
+    encoders = {
+        "location": LocationVOEncoder(),
+    }
 
 
 @require_http_methods(["GET", "POST"])
@@ -35,11 +49,16 @@ def api_list_hats(request, location_vo_id=None):
         )
     else:
         content = json.loads(request.body)
-
         try:
-            location_href = content["loaction"]
-            location = LocationVO.objects.get(import_href=location_href)
+            location_href = content["location"]
+            location = LocationVO.objects.get(location_href=location_href)
             content["location"] = location
+            hats = Hat.objects.create(**content)
+            return JsonResponse(
+                hats,
+                encoder=HatDetailEncoder,
+                safe=False,
+            )
         except LocationVO.DoesNotExist:
             return JsonResponse(
                 {"message": "Invalid Location id"},
@@ -60,7 +79,7 @@ def api_show_hat(request, pk):
             )
         except Hat.DoesNotExist:
             response = JsonResponse({"message": "Deos not exist"})
-            response.status.code = 404
+            response.status_code = 404
             return response
     elif request.method == "DELETE":
         try:

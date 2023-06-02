@@ -18,12 +18,9 @@ def bins_storage():
     content = json.loads(response.content)
     for bin in content["bins"]:
         BinVO.objects.update_or_create(
-
+            bin_href = bin["href"],
             defaults= {
                 "closet_name": bin["closet_name"],
-                "bin_number": bin["bin_number"],
-                "bin_size": bin["bin_size"],
-                "bin_href": bin["href"],
             }
         )
 

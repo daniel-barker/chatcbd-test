@@ -5,8 +5,8 @@ from django.db import models
 
 class BinVO(models.Model):
     closet_name = models.CharField(max_length=100, null=True)
-    bin_number = models.PositiveSmallIntegerField()
-    bin_size = models.PositiveSmallIntegerField()
+    # bin_number = models.PositiveSmallIntegerField()
+    # bin_size = models.PositiveSmallIntegerField()
     bin_href = models.CharField(max_length=100, unique=True)
 
 
@@ -22,4 +22,3 @@ class Shoe(models.Model):
         related_name="shoe_bin_location",
         on_delete=models.CASCADE,
     )
-

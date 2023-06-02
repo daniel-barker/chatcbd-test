@@ -8,7 +8,7 @@ import json
 class LocationVOEncoder(ModelEncoder):
     model = LocationVO
     properties = [
-        "shelf_number",
+        # "shelf_number",
         "location_href",
     ]
 

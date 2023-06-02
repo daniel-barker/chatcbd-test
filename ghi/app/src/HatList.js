@@ -1,18 +1,43 @@
 function HatList(props) {
+  const deleteHat = async (href) => {
+    const url = `http://localhost:8090/${href}`;
+    const fetchConfig = {
+        method: "delete",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    };
+
+    const response = await fetch(url, fetchConfig);
+    if (response.ok) {
+        window.location.reload(false);
+    }
+}
     return (
     <table className="table table-striped">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Conference</th>
+            <th>Style</th>
+            <th>Fabric</th>
+            <th>Color</th>
+            <th>Picture</th>
+            <th>Location</th>
           </tr>
         </thead>
         <tbody>
           {props.hats.map(hat => {
             return (
               <tr key={hat.href}>
-                <td>{ hat.name }</td>
-                <td>{ hat.location }</td>
+                <td>{ hat.style }</td>
+                <td>{ hat.fabric }</td>
+                <td>{ hat.color }</td>
+                <td>
+                    <img src={hat.picture_url} alt="" width="75px" height="75px"/>
+                </td>
+                <td>{hat.location}</td>
+                {<td>
+                  <button className="btn btn-outline-primary" onClick={() => deleteHat(hat.href)}>Delete</button>
+                </td>}
               </tr>
             );
           })}

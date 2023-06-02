@@ -15,6 +15,8 @@ export default function ShoesList(props) {
                         <tr key={shoe.id}>
                             <td>{shoe.shoe_make}</td>
                             <td>{shoe.shoe_model}</td>
+                            <td>{shoe.shoe_color}</td>
+
                         </tr>
                     );
                 })}

@@ -16,6 +16,7 @@ class BinVOEncoder(ModelEncoder):
 class ShoeListEncoder(ModelEncoder):
     model = Shoe
     properties = [
+        "id",
         "shoe_make",
         "shoe_model",
     ]
@@ -25,15 +26,16 @@ class ShoeListEncoder(ModelEncoder):
 class ShoeDetailEncoder(ModelEncoder):
     model = Shoe
     properties = [
+        "id",
         "shoe_make",
         "shoe_model",
         "shoe_color",
         "shoe_picture",
         "bin",
     ]
-    encoders = {
-        "bin": BinVOEncoder(),
-    }
+    def get_extra_data(self, o):
+        return {"bin": o.bin.closet_name}
+
 
 
 
@@ -68,14 +70,6 @@ def api_list_shoes(request, bin_vo_id=None):
                 {"message": "Invalid bin id"},
                 status=400,
             )
-
-        shoe = Shoe.objects.create(**content)
-        return JsonResponse(
-            shoe,
-            encoder=ShoeDetailEncoder,
-            safe=False,
-        )
-
 
 
 @require_http_methods(["GET", "DELETE", "PUT"])

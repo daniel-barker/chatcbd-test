@@ -37,7 +37,6 @@ function ShoeForm() {
         }
     }
 
-
     const handleSubmit = async (event) => {
         event.preventDefault()
         const data = {}
